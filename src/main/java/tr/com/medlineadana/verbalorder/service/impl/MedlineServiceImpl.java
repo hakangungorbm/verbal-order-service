@@ -14,6 +14,8 @@ import tr.com.medlineadana.verbalorder.entity.OlayKayit;
 import tr.com.medlineadana.verbalorder.exception.ServiceFaultException;
 import tr.com.medlineadana.verbalorder.mapper.MedlineMapper;
 import tr.com.medlineadana.verbalorder.model.*;
+import tr.com.medlineadana.verbalorder.monadservice.dto.MonadResponse;
+import tr.com.medlineadana.verbalorder.monadservice.service.MonadService;
 import tr.com.medlineadana.verbalorder.repository.MedlineRepository;
 import tr.com.medlineadana.verbalorder.service.MedlineService;
 
@@ -35,22 +37,35 @@ public class MedlineServiceImpl implements MedlineService {
     private final MedlineRepository repository;
     private final MedlineMapper medlineMapper;
 
+    private final MonadService monadService;
+
     private final List<String> types = Arrays.asList("tetkik", "order");
 
 
     @Override
-    public OlayKararResponse approve(OlayRequest request) {
+    public OlayKararResponse approve(OlayRequest request) throws ServiceFaultException {
 
         checkRulesForRequestData(request);
 
-        final Optional<OlayKayit> kayit = repository.findByNumara(request.getNumber());
-        if(kayit.isPresent()) {
-            throw new ServiceFaultException("Bu kayıt için daha önce işlem yapılmış. Tekrar işlem yapılamaz","400");
+        String olayNumarasi = request.getNumber();
+
+        final Optional<OlayKayit> kayit = repository.findByNumara(olayNumarasi);
+        if (kayit.isPresent()) {
+            throw new ServiceFaultException("Bu kayıt için daha önce işlem yapılmış. Tekrar işlem yapılamaz", "400");
         }
 
-        if(request.getNumber().length() == 6) {
+        if (request.getNumber().length() == 6) {
+
             try {
-                final OlayKayit olayKayit = medlineMapper.toEntity(request);
+                OlayKayit olayKayit = medlineMapper.toEntity(request);
+
+                MonadResponse monadResponse = monadService.getRelatedInfo(olayNumarasi);
+
+                if (monadResponse != null) {
+                    olayKayit.setOrderCreatedDate(monadResponse.getKayitTarihi());
+                    olayKayit.setPatientNo(monadResponse.getHastaNo());
+                    olayKayit.setPatientBirthdate(monadResponse.getDogumTarihi());
+                }
 
                 olayKayit.setDoctorApproveDate(LocalDateTime.now());
                 OlayKayit result = repository.save(olayKayit);
@@ -62,8 +77,9 @@ public class MedlineServiceImpl implements MedlineService {
 
                 return response;
 
-            }catch (Exception e) {
-                throw new ServiceFaultException("Onay kayıt işlemi esnasında bir hata oluştu!",e.getMessage());
+            } catch (Exception e) {
+                log.error("HATA NOKTASI: MedlineService - approve - HATA DETAYI" + e.getMessage());
+                throw new ServiceFaultException("Onay işlemi esnasında hata: " + e.getMessage(), "404");
             }
         } else {
             throw new ServiceFaultException("Geçersiz numara. Olay numarası istenilen uzunlukta degil!");
@@ -74,16 +90,16 @@ public class MedlineServiceImpl implements MedlineService {
     public ResponseEntity<ApiResponse> getPageableKayit(@RequestBody OlayPageableSearchRequest request) {
 
         try {
-            Sort.Order order = new Sort.Order(request.getPage().getSortDirection(),request.getPage().getSortField()).ignoreCase();
+            Sort.Order order = new Sort.Order(request.getPage().getSortDirection(), request.getPage().getSortField()).ignoreCase();
 
 
-            Pageable pageable = PageRequest.of(request.getPage().getFirst()/request.getPage().getRows(),request.getPage().getRows(), Sort.by(order));
+            Pageable pageable = PageRequest.of(request.getPage().getFirst() / request.getPage().getRows(), request.getPage().getRows(), Sort.by(order));
             final Page<OlayKayitResponse> olayKayitListesi = repository.findAll(pageable).map(medlineMapper::toOlayKayitResponse);
 
-            return ResponseEntity.ok(handleSuccess(new ApiResponse<>(olayKayitListesi.getSize(),olayKayitListesi,RESPONSE_OK)));
+            return ResponseEntity.ok(handleSuccess(new ApiResponse<>(olayKayitListesi.getSize(), olayKayitListesi, RESPONSE_OK)));
 
-        }catch (Exception e) {
-            throw new ServiceFaultException("Kayitlar getirilirken bir hata olustu",e.getMessage());
+        } catch (Exception e) {
+            throw new ServiceFaultException("Kayıtlar getirilirken bir hata oluştu " + e.getMessage(), "404");
         }
 
     }
@@ -91,14 +107,14 @@ public class MedlineServiceImpl implements MedlineService {
     @Override
     public ViewUpdateResponse viewUpdate(ViewUpdateRequest request) {
         final OlayKayit olayKayit = repository.getById(request.getId());
-        if(!olayKayit.isGorulmeDurumu() && olayKayit.getViewDate() == null) {
+        if (!olayKayit.isGorulmeDurumu() && olayKayit.getViewDate() == null) {
             try {
                 olayKayit.setViewDate(LocalDateTime.now());
                 olayKayit.setGorulmeDurumu(true);
                 final OlayKayit updatedOlayKayit = repository.save(olayKayit);
-                return new ViewUpdateResponse(updatedOlayKayit.getNumara(),updatedOlayKayit.isGorulmeDurumu(),RESPONSE_OK);
+                return new ViewUpdateResponse(updatedOlayKayit.getNumara(), updatedOlayKayit.isGorulmeDurumu(), RESPONSE_OK);
             } catch (Exception e) {
-                throw new ServiceFaultException("Görülme kaydı onayı esnasında bir hata oluştu: ",e.getMessage());
+                throw new ServiceFaultException("Görülme kaydı onayı esnasında bir hata oluştu: ", e.getMessage());
             }
         } else {
             throw new ServiceFaultException("Bu kayda daha önce görülme onayı verilmiş durumda! Tekrar işlem yapamazsınız!");
@@ -119,17 +135,17 @@ public class MedlineServiceImpl implements MedlineService {
     }
 
     private void checkRulesForRequestData(OlayRequest request) {
-        if(request.getType() ==null || request.getNumber() ==null) {
-            throw new ServiceFaultException("Hatalı İşlem: İşlem yapılan olay tipi ve numarası boş olamaz!","400");
+        if (request.getType() == null || request.getNumber() == null) {
+            throw new ServiceFaultException("Hatalı İşlem: İşlem yapılan olay tipi ve numarası boş olamaz!", "400");
         }
-        if(request.getType().isEmpty() || request.getNumber().isEmpty() ) {
-            throw new ServiceFaultException("Hatalı İşlem: İşlem yapılan olay tipi ve numarası boş olamaz!","400");
+        if (request.getType().isEmpty() || request.getNumber().isEmpty()) {
+            throw new ServiceFaultException("Hatalı İşlem: İşlem yapılan olay tipi ve numarası boş olamaz!", "400");
         }
-        if(!checkType(request.getType())) {
-            throw new ServiceFaultException("Hatalı İşlem: Olay tipi geçersiz. Bu tip için işlem yapılamaz!","404");
+        if (!checkType(request.getType())) {
+            throw new ServiceFaultException("Hatalı İşlem: Olay tipi geçersiz. Bu tip için işlem yapılamaz!", "404");
         }
-        if(!onlyDigits(request.getNumber())){
-            throw new ServiceFaultException("Hatalı İşlem: Kayıt numarası sadece sayısal değerlerden oluşmalıdır. Bu numara ile işlem yapılamaz!","400");
+        if (!onlyDigits(request.getNumber())) {
+            throw new ServiceFaultException("Hatalı İşlem: Kayıt numarası sadece sayısal değerlerden oluşmalıdır. Bu numara ile işlem yapılamaz!", "400");
         }
     }
 
