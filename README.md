@@ -1,10 +1,18 @@
-#verbal-order-service
+## verbal-order-service
 
-Medline sozel order onay sistemi
+Medline olay onay ve takip sistemi(Sözel Order, Tetkik, Panik Değer)
 
 http://localhost:8082/swagger-ui/index.html
 
-##Kurulumlar
+## DEPLOY işlemi
+
+Mevcut deploy olmuş uygulamalar
+
+http://localhost:8082/manager/
+
+adresi kullanılarak undeploy yapılır. Sonra intellij yardımıyla derlenerek  oluşturulan war dosyaları  C:\apache-tomcat-9.0.62\webapps  dizinine kopyalanır ve tekrar yine manager ekranından start edilir.
+
+## Kurulumlar
 **Docker Kurulumu**
 
 
@@ -37,7 +45,6 @@ docker run --name postgres-instance --publish=5432:5432 -e POSTGRES_DB=postgres 
 
 - create database medlineverbalorder;
 
-- create database orderservice;
 
 etc.
 

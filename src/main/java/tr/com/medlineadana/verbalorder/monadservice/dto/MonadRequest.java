@@ -9,5 +9,5 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class MonadRequest {
-    private String orderNumber;
+    private String olayNumarasi;
 }

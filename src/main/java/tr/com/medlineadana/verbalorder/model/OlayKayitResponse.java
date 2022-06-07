@@ -24,13 +24,13 @@ public class OlayKayitResponse {
     private Long id;
 
     @ApiModelProperty(value = "doktorun sms mesajı uzerinden islem yaptigi tarih")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="dd.MM.yyyy HH:mm")
     private LocalDateTime doctorApproveDate;
 
-    @ApiModelProperty(value = "order veya tetkik seklinde olay tipi")
+    @ApiModelProperty(value = "order tetkik, panikdeger seklinde olay tipi")
     private Olaylar olay;
 
-    @ApiModelProperty(value = "order veya tetkik numarasi")
+    @ApiModelProperty(value = "order, tetkik, panikdeger numarasi")
     private String numara;
 
     @ApiModelProperty(value = "doktorun ekrandan sectigi cevap")
@@ -40,7 +40,7 @@ public class OlayKayitResponse {
     private Boolean gorulmeDurumu;
 
     @ApiModelProperty(value = "hemsirenin ekranda goruldu yaptigi zamani")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
     private LocalDateTime viewDate;
 
     @ApiModelProperty(value = "ordera muhatap doktor adi")
@@ -50,7 +50,7 @@ public class OlayKayitResponse {
     private String nurseName;
 
     @ApiModelProperty(value = "hemsirenin order olusturdugu zaman")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
     private LocalDateTime orderCreatedDate;
 
     @ApiModelProperty(value = "hasta numarasi")
@@ -60,6 +60,12 @@ public class OlayKayitResponse {
     private String patientName;
 
     @ApiModelProperty(value = "hasta dogum tarihi")
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="dd.MM.yyyy")
     private LocalDate patientBirthdate;
+
+    @ApiModelProperty(value = "Hasta Katı")
+    private Integer yatakgrubuKodu;
+
+    @ApiModelProperty(value = "Hasta Yattığı kat ve durumu")
+    private String yatakgrubuAdi;
 }

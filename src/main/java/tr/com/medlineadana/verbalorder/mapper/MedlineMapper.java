@@ -3,12 +3,14 @@ package tr.com.medlineadana.verbalorder.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import tr.com.medlineadana.verbalorder.entity.OlayDetay;
 import tr.com.medlineadana.verbalorder.entity.OlayKayit;
 import tr.com.medlineadana.verbalorder.enums.Olaylar;
 import tr.com.medlineadana.verbalorder.enums.OnayDurumlari;
-import tr.com.medlineadana.verbalorder.model.FakeRequest;
+import tr.com.medlineadana.verbalorder.model.IslemDto;
 import tr.com.medlineadana.verbalorder.model.OlayKayitResponse;
 import tr.com.medlineadana.verbalorder.model.OlayRequest;
+import tr.com.medlineadana.verbalorder.monadservice.dto.OlayIslemleriResponse;
 
 @Mapper
 public interface MedlineMapper {
@@ -23,6 +25,10 @@ public interface MedlineMapper {
 
     OlayKayitResponse toOlayKayitResponse(OlayKayit olayKayit);
 
+    OlayDetay toOlayDetayEntity(OlayIslemleriResponse dto);
+
+    IslemDto toIslemDto(OlayDetay olayDetay);
+
     @Named("onaydurum")
     default OnayDurumlari onaydurum(Object o) {
         if(o == null) {
@@ -31,6 +37,7 @@ public interface MedlineMapper {
             return switch ((String) o) {
                 case "onayliyorum" -> OnayDurumlari.ONAYLANDI;
                 case  "reddediyorum" -> OnayDurumlari.RED_EDILDI;
+                case  "taburcu" -> OnayDurumlari.TABURCU;
                 default -> null;
             };
         }
@@ -44,16 +51,10 @@ public interface MedlineMapper {
             return switch ((String) o) {
                 case "order" -> Olaylar.ORDER;
                 case  "tetkik" -> Olaylar.TETKIK;
+                case  "panikdeger" -> Olaylar.PANIKDEGER;
                 default -> null;
             };
         }
     }
-
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "onayDurumu", source = "cevap", qualifiedByName="onaydurum")
-    @Mapping(target = "numara", source="number")
-    @Mapping(target = "olay", source = "type", qualifiedByName = "olaylar")
-    OlayKayit fakeRequetToEntity(FakeRequest dto);
 
 }

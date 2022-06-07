@@ -5,7 +5,7 @@ import tr.com.medlineadana.verbalorder.entity.OlayKayit;
 
 import java.util.Optional;
 
-public interface MedlineRepository extends JpaRepository<OlayKayit,Long> {
+public interface OlayRepository extends JpaRepository<OlayKayit,Long> {
 
     Optional<OlayKayit> findByNumara(String number);
 

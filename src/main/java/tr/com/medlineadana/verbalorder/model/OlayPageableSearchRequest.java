@@ -20,5 +20,7 @@ public class OlayPageableSearchRequest {
     private String patientNo;
     private String patientName;
     private LocalDate patientBirthdate;
+    private Integer yatakgrubuKodu;
+    private String yatakgrubuAdi;
     private PageSortInfo page;
 }

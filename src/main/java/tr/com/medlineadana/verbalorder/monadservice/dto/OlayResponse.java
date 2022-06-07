@@ -16,18 +16,34 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "Monad veri tabanlarindaki iliskili kaydi doner")
+@ApiModel(value = "Monad veri tabanlarindaki iliskili sözel order detayını döner")
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class MonadResponse {
+public class OlayResponse {
+
+    @ApiModelProperty(value = "Doktor adi soyadi")
+    private String tedaviDoktoru;
+
+    @ApiModelProperty(value = "Hemsire adi soyadi")
+    private String kayitedenPersonel;
+
+    @ApiModelProperty(value = "Hasta adi soyadi")
+    private String hastaadiSoyadi;
 
     @ApiModelProperty(value = "Kayit tarihi")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
     private LocalDateTime kayitTarihi;
 
     @ApiModelProperty(value = "Hasta No")
     private String hastaNo;
 
     @ApiModelProperty(value = "Hasta dogum tarihi")
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate dogumTarihi;
+
+    @ApiModelProperty(value = "Hasta Katı")
+    private Integer yatakgrubuKodu;
+
+    @ApiModelProperty(value = "Hasta Yattığı kat ve durumu")
+    private String yatakgrubuAdi;
+
 }

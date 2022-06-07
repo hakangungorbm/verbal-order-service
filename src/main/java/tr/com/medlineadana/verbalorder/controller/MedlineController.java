@@ -8,6 +8,7 @@ import tr.com.medlineadana.verbalorder.model.*;
 import tr.com.medlineadana.verbalorder.service.MedlineService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class MedlineController {
 
     private final MedlineService medlineService;
 
-    @PostMapping("/order")
+    @PostMapping("/olay")
     public OlayKararResponse query(@RequestBody OlayRequest request) throws Exception {
             return medlineService.approve(request);
     }
@@ -25,6 +26,12 @@ public class MedlineController {
     @ApiOperation(value = "Verilen filtreye gore veri tabanindaki tum kayitlari sayfali getirir")
     public ResponseEntity<ApiResponse> getAllKayitByFilter(@RequestBody @Valid OlayPageableSearchRequest request) {
         return medlineService.getPageableKayit(request);
+    }
+
+    @PostMapping("/islem-listesi")
+    @ApiOperation(value = "Verilen filtreye gore veri tabanindaki tum kayitlari sayfali getirir")
+    public OlayDetayResponse getIslemListesi(@RequestBody OlayDetayRequest request) {
+        return medlineService.getOlayIslemDetay(request);
     }
 
     @PostMapping("/viewUpdate")

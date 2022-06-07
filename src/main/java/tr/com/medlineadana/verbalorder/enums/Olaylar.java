@@ -5,7 +5,9 @@ import lombok.Getter;
 @Getter
 public enum Olaylar {
     ORDER("order"),
-    TETKIK("tetkik");
+    TETKIK("tetkik"),
+
+    PANIKDEGER("panikdeger");
 
     public String olayTipi;
 

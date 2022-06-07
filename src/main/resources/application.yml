@@ -30,8 +30,8 @@ management.endpoints.health.enabled: true
 
 #monad service ###################
 monad-service:
-  url: http://localhost:8083/monad
-# url: http://31.145.157.186:8082/monad-service/monad
+#  main: http://localhost:8083/monad
+  main: http://localhost:8082/monad-service/monad
 
 ###############LOG - NOT: PROD ORTAMINDA ŞİFRELERİ VS YAZAR. EKLENMEZ########
 #logging.level.org.springframework.web: TRACE

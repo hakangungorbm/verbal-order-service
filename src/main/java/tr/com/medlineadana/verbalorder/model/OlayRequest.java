@@ -10,14 +10,14 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@ApiModel(value="Sozel Order veya tetkik islemlerin onay durumlarini tasir")
+@ApiModel(value="Sozel Order, tetkik veya panikdeger islemlerin onay durumlarini tasir")
 public class OlayRequest {
     @ApiModelProperty(value = "Olay tipi - order veya  tetkik olabilir", name = "type", dataType = "String")
     @NotNull(message = "Olay verisi bos olamaz!")
     private String type;
 
     @ApiModelProperty(value = "Order numarasi", name = "number", dataType = "String")
-    @Size(min = 6, max = 6, message = "Kayit numarasi 6 haneli olmalidir!")
+    @Size(min = 6, max = 8, message = "Kayit numarasi 6 haneli olmalidir!")
     private String number;
 
     @ApiModelProperty(value = "Onay cevabi - Onaylıyorum - Red Ediyorum", name = "cevap", dataType = "String")
