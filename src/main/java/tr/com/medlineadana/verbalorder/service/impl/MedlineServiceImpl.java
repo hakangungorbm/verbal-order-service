@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import tr.com.medlineadana.verbalorder.entity.OlayDetay;
 import tr.com.medlineadana.verbalorder.entity.OlayKayit;
+import tr.com.medlineadana.verbalorder.enums.Olaylar;
 import tr.com.medlineadana.verbalorder.enums.OnayDurumlari;
 import tr.com.medlineadana.verbalorder.exception.ServiceFaultException;
 import tr.com.medlineadana.verbalorder.mapper.MedlineMapper;
@@ -25,10 +26,7 @@ import tr.com.medlineadana.verbalorder.service.MedlineService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -47,7 +45,7 @@ public class MedlineServiceImpl implements MedlineService {
 
     private final OlayService olayService;
 
-    private final List<String> types = Arrays.asList("tetkik", "order", "panikdeger");
+    private final List<String> types = Arrays.asList("order", "panikdeger", "radyolojipanikdeger");
 
 
     @Override
@@ -73,12 +71,13 @@ public class MedlineServiceImpl implements MedlineService {
             OlayKayit olayKayit = medlineMapper.toEntity(request);
 
             //2. Adim: olay numarasi ile olayin detayini monad servisten getirdim
-            OlayResponse olayResponse = olayService.getSozelOrderDetayFromMonad(olayNumarasi);
+            OlayResponse olayResponse = getOlayDetayResponse(olayKayit.getOlay(), olayNumarasi);
+
 
             if (olayResponse != null && !olayResponse.getHastaNo().isEmpty()) {
 
                 //3. Adim: olaya ait islem listesini monad servisten getirip sorunsuz kayit edildiyse digerlerini de kayit ediyorum.
-                if(islemListesiIslemleri(olayNumarasi,olayTipi)) {
+                if(islemListesiIslemleri(olayNumarasi,olayKayit.getOlay())) {
                     olayKayit.setDoctorName(olayResponse.getTedaviDoktoru());
                     olayKayit.setNurseName(olayResponse.getKayitedenPersonel());
                     olayKayit.setPatientName(olayResponse.getHastaadiSoyadi());
@@ -97,8 +96,6 @@ public class MedlineServiceImpl implements MedlineService {
 
             olayKayit.setDoctorApproveDate(LocalDateTime.now());
 
-
-
             OlayKayit result = olayRepository.save(olayKayit);
 
             OlayKararResponse response = new OlayKararResponse();
@@ -114,15 +111,16 @@ public class MedlineServiceImpl implements MedlineService {
         }
     }
 
-    public Boolean islemListesiIslemleri(String olayNumarasi, String olayTipi) throws ServiceFaultException {
-        List<OlayIslemleriResponse> islemListesi = olayService.getSozelOrderIslemListesiFromMonad(olayNumarasi);
+    public Boolean islemListesiIslemleri(String olayNumarasi, Olaylar olayTipi) throws ServiceFaultException {
 
-        if(!islemListesi.isEmpty() && !islemListesi.get(0).getIslemAdi().isEmpty()) {
+        List<OlayIslemleriResponse> islemListesi = getOlayIslemListesiResponse(olayTipi, olayNumarasi);
+
+        if(!islemListesi.isEmpty() && islemListesi.get(0) !=null && !islemListesi.get(0).getIslemAdi().isEmpty()) {
             try {
                 List<OlayDetay> olayDetayList = islemListesi.stream().map(medlineMapper::toOlayDetayEntity).collect(Collectors.toList());
                 for(OlayDetay islem: olayDetayList) {
                     islem.setNumara(olayNumarasi);
-                    islem.setOlay(medlineMapper.olaylar(olayTipi));
+                    islem.setOlay(olayTipi);
                     islem.setCreatedDate(LocalDateTime.now());
                 }
                 olayIslemleriRepository.saveAll(olayDetayList);
@@ -214,6 +212,51 @@ public class MedlineServiceImpl implements MedlineService {
         if (!onlyDigits(request.getNumber())) {
             throw new ServiceFaultException("Hatalı İşlem: Kayıt numarası sadece sayısal değerlerden oluşmalıdır. Bu numara ile işlem yapılamaz!", "400");
         }
+    }
+
+
+    public OlayResponse getOlayDetayResponse (Olaylar olaykayit, String olayNumarasi) {
+        OlayResponse olayResponse = new OlayResponse();
+        switch (olaykayit) {
+            case PANIKDEGER -> {
+                olayResponse = olayService.getPanikDegerDetayFromMonad(olayNumarasi);
+                break;
+            }
+            case ORDER -> {
+                olayResponse = olayService.getSozelOrderDetayFromMonad(olayNumarasi);
+                break;
+            }
+            case RADYOLOJIPANIKDEGER -> {
+                    olayResponse = olayService.getRadyolojiPanikDegerDetayFromMonad(olayNumarasi);
+                break;
+            }
+            default -> {
+                throw new ServiceFaultException("Servis seçimi esnasında hata oluştu(OlayDetay)", "404");
+            }
+        }
+        return olayResponse;
+    }
+
+    public List<OlayIslemleriResponse> getOlayIslemListesiResponse (Olaylar olaykayit, String olayNumarasi) {
+        List<OlayIslemleriResponse> islemList = new ArrayList<>();
+        switch (olaykayit) {
+            case PANIKDEGER -> {
+                islemList = olayService.getPanikDegerIslemListesiFromMonad(olayNumarasi);
+                break;
+            }
+            case ORDER -> {
+                islemList = olayService.getSozelOrderIslemListesiFromMonad(olayNumarasi);
+                break;
+            }
+            case RADYOLOJIPANIKDEGER -> {
+                    islemList = olayService.getRadyolojiPanikDegerIslemListesiFromMonad(olayNumarasi);
+                break;
+            }
+            default -> {
+                throw new ServiceFaultException("Servis seçimi esnasında hata oluştu(Islem Listesi)", "404");
+            }
+        }
+        return islemList;
     }
 
     public ApiResponse handleSuccess(Object object) {

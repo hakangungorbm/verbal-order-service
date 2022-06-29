@@ -34,6 +34,34 @@ public class MonadOlayController {
         return olayService.getSozelOrderIslemListesiFromMonad(request);
     }
 
+    @ApiOperation(value = "Monad servis üzerinden ilişkili panik deger detaylarını getirir")
+    @PostMapping("/panik-deger/detay")
+    public OlayResponse panikDegerDetay(@RequestBody OlayRequest olayRequest) {
+        String request = olayRequest.getNumber();
+        return olayService.getPanikDegerDetayFromMonad(request);
+    }
+
+    @ApiOperation(value = "Monad servis üzerinden ilişkili panik deger islem listesi detaylarını getirir")
+    @PostMapping("/panik-deger/islem-listesi")
+    public List<OlayIslemleriResponse> panikDegerIslemListesi(@RequestBody OlayRequest olayRequest) {
+        String request = olayRequest.getNumber();
+        return olayService.getPanikDegerIslemListesiFromMonad(request);
+    }
+
+    @ApiOperation(value = "Monad servis üzerinden ilişkili radyoloji panik deger detaylarını getirir")
+    @PostMapping("/radyoloji-panik-deger/detay")
+    public OlayResponse radyolojiPanikDegerDetay(@RequestBody OlayRequest olayRequest) {
+        String request = olayRequest.getNumber();
+        return olayService.getRadyolojiPanikDegerDetayFromMonad(request);
+    }
+
+    @ApiOperation(value = "Monad servis üzerinden ilişkili radyoloji panik deger islem listesi  detaylarını getirir")
+    @PostMapping("/radyoloji-panik-deger/islem-listesi")
+    public List<OlayIslemleriResponse> radyolojiPanikDegerIslemListesi(@RequestBody OlayRequest olayRequest) {
+        String request = olayRequest.getNumber();
+        return olayService.getRadyolojiPanikDegerIslemListesiFromMonad(request);
+    }
+
 
 }
 

@@ -2,6 +2,8 @@ package tr.com.medlineadana.verbalorder.enums;
 
 public enum OnayDurumlari {
     ONAYLANDI("onayliyorum"),
+
+    GORULDU("goruldu"),
     RED_EDILDI("reddediyorum"),
     TABURCU("taburcu");
 

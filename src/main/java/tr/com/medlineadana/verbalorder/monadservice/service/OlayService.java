@@ -8,4 +8,12 @@ import java.util.List;
 public interface OlayService {
     OlayResponse getSozelOrderDetayFromMonad(String olayNumarasi);
     List<OlayIslemleriResponse> getSozelOrderIslemListesiFromMonad(String olayNumarasi);
+
+    OlayResponse getPanikDegerDetayFromMonad(String olayNumarasi);
+
+    List<OlayIslemleriResponse> getPanikDegerIslemListesiFromMonad(String olayNumarasi);
+
+    OlayResponse getRadyolojiPanikDegerDetayFromMonad(String olayNumarasi);
+
+    List<OlayIslemleriResponse> getRadyolojiPanikDegerIslemListesiFromMonad(String olayNumarasi);
 }

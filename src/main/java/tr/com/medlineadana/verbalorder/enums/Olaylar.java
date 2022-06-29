@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum Olaylar {
     ORDER("order"),
-    TETKIK("tetkik"),
+    RADYOLOJIPANIKDEGER("radyolojipanikdeger"),
 
     PANIKDEGER("panikdeger");
 

@@ -23,6 +23,8 @@ public interface MedlineMapper {
     OlayKayit toEntity(OlayRequest dto);
 
 
+    @Mapping(target = "yatakgrubuAdi", source="floorDetail")
+    @Mapping(target = "yatakgrubuKodu", source="floor")
     OlayKayitResponse toOlayKayitResponse(OlayKayit olayKayit);
 
     OlayDetay toOlayDetayEntity(OlayIslemleriResponse dto);
@@ -37,6 +39,7 @@ public interface MedlineMapper {
             return switch ((String) o) {
                 case "onayliyorum" -> OnayDurumlari.ONAYLANDI;
                 case  "reddediyorum" -> OnayDurumlari.RED_EDILDI;
+                case  "goruldu" -> OnayDurumlari.GORULDU;
                 case  "taburcu" -> OnayDurumlari.TABURCU;
                 default -> null;
             };
@@ -50,8 +53,9 @@ public interface MedlineMapper {
         }else {
             return switch ((String) o) {
                 case "order" -> Olaylar.ORDER;
-                case  "tetkik" -> Olaylar.TETKIK;
                 case  "panikdeger" -> Olaylar.PANIKDEGER;
+                case  "radyolojipanikdeger" -> Olaylar.RADYOLOJIPANIKDEGER;
+
                 default -> null;
             };
         }
