@@ -28,14 +28,14 @@ management.endpoints.health.enabled: true
 
 #monad service ###################
 monad-service:
-#  main: http://localhost:8083/monad
-  main: http://localhost:8082/monad-service/monad
+#  main: http://localhost:8083/monad #local bilgisayarda
+  main: http://localhost:8082/monad-service/monad #sucuda
 
 ###############LOG - NOT: PROD ORTAMINDA ŞİFRELERİ VS YAZAR. EKLENMEZ########
-logging.level.org.springframework.web: TRACE
-logging.level.org.springframework.security: TRACE
-logging.level.org.springframework.web.client.RestTemplate: DEBUG
-logging.level.web: TRACE
+logging.level.org.springframework.web: INFO
+logging.level.org.springframework.security: INFO
+logging.level.org.springframework.web.client.RestTemplate: INFO
+logging.level.web: INFO
 #logging.level.org.springframework.actuator: TRACE
 #logging.level.org.hibernate.SQL: TRACE
 #logging.level.org.hibernate.type.descriptor.sql: TRACE
