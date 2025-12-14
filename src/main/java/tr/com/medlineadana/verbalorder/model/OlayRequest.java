@@ -1,7 +1,7 @@
 package tr.com.medlineadana.verbalorder.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,17 +10,17 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-@ApiModel(value="Sozel Order, tetkik veya panikdeger islemlerin onay durumlarini tasir")
+@Schema(description ="Sozel Order, tetkik veya panikdeger islemlerin onay durumlarini tasir")
 public class OlayRequest {
-    @ApiModelProperty(value = "Olay tipi - order veya  tetkik olabilir", name = "type", dataType = "String")
+    @Schema(description = "Olay tipi - order veya  tetkik olabilir", name = "type", type = "string")
     @NotNull(message = "Olay verisi bos olamaz!")
     private String type;
 
-    @ApiModelProperty(value = "Order numarasi", name = "number", dataType = "String")
+    @Schema(description = "Order numarasi", name = "number", type = "string")
     @Size(min = 6, max = 8, message = "Kayit numarasi 6 haneli olmalidir!")
     private String number;
 
-    @ApiModelProperty(value = "Onay cevabi - Onaylıyorum - Red Ediyorum", name = "cevap", dataType = "String")
+    @Schema(description = "Onay cevabi - Onaylıyorum - Red Ediyorum", name = "cevap", type = "string")
     @NotNull(message = "Seceneklerden birisi secilmis olmali! Bos olamaz")
     private String cevap;
 }

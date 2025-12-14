@@ -1,18 +1,20 @@
 package tr.com.medlineadana.verbalorder.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import tr.com.medlineadana.verbalorder.enums.OnayDurumlari;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "Onay islemi sonrası dönen DTO")
+@Schema(description = "Onay islemi sonrası dönen DTO")
 public class OlayKararResponse {
-    @ApiModelProperty(value = "Kaydin numarasi")
+    @Schema(description = "Kaydin numarasi")
     private String number;
-    @ApiModelProperty(value = "Onay Durumu")
+    @Schema(description = "Onay Durumu")
     private OnayDurumlari onayDurumu;
 }

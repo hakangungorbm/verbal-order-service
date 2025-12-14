@@ -19,8 +19,6 @@ server:
   compression:
     enabled: true
     mime-types: application/json
-  servlet:
-    context-path:
   error.include-message: always
   error.include-binding-errors: always
   error.include-exception: false
@@ -34,10 +32,10 @@ monad-service:
   main: http://localhost:8082/monad-service/monad
 
 ###############LOG - NOT: PROD ORTAMINDA ŞİFRELERİ VS YAZAR. EKLENMEZ########
-#logging.level.org.springframework.web: TRACE
-#logging.level.org.springframework.security: TRACE
-#logging.level.org.springframework.web.client.RestTemplate: DEBUG
-#logging.level.web: TRACE
+logging.level.org.springframework.web: TRACE
+logging.level.org.springframework.security: TRACE
+logging.level.org.springframework.web.client.RestTemplate: DEBUG
+logging.level.web: TRACE
 #logging.level.org.springframework.actuator: TRACE
 #logging.level.org.hibernate.SQL: TRACE
 #logging.level.org.hibernate.type.descriptor.sql: TRACE

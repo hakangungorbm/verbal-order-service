@@ -5,19 +5,18 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.0</version>
+		<version>2.7.0</version>
 		<relativePath/>
 	</parent>
 
 	<groupId>tr.com.medlineadana</groupId>
-	<artifactId>verbal-order</artifactId>
+	<artifactId>verbal-order-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>verbal-order</name>
+	<name>verbal-order-service</name>
 	<description>Verbal order confirmation system</description>
 	<packaging>war</packaging>
 	<properties>
 		<java.version>17</java.version>
-		<io.springfox.version>3.0.0</io.springfox.version>
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
 	</properties>
@@ -32,8 +31,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
+			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -60,27 +58,22 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-boot-starter</artifactId>
-			<version>${io.springfox.version}</version>
-		</dependency>
 
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${io.springfox.version}</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-webflux-ui</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.6.15</version>
 		</dependency>
 
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>${validation-api.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 
 
@@ -192,7 +185,7 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<JAVA_17_HOME>C:\Program Files\Java\jdk-17.0.1</JAVA_17_HOME>
+				<JAVA_17_HOME>C:\Program Files\Java\jdk-17</JAVA_17_HOME>
 			</properties>
 		</profile>
 	</profiles>

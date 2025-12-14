@@ -1,8 +1,7 @@
 package tr.com.medlineadana.verbalorder.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,20 +13,20 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "Olay no bilinen bir olayin islem listesini doner")
+@Schema(description = "Olay no bilinen bir olayin islem listesini doner")
 public class IslemDto {
 
-    @ApiModelProperty(value = "Islem Tarihi")
+    @Schema(description = "Islem Tarihi")
     @JsonFormat(pattern="dd.MM.yyyy")
     private LocalDate islemTarihi;
 
-    @ApiModelProperty(value = "Islem adi")
+    @Schema(description = "Islem adi")
     private String islemAdi;
 
-    @ApiModelProperty(value = "Sonuc")
+    @Schema(description = "Sonuc")
     private String sonuc;
 
-    @ApiModelProperty(value = "Frekans Deger")
+    @Schema(description = "Frekans Deger")
     private String frekansDeger;
 
 }

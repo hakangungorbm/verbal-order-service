@@ -1,8 +1,7 @@
 package tr.com.medlineadana.verbalorder.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,59 +12,64 @@ import tr.com.medlineadana.verbalorder.enums.OnayDurumlari;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+//Springdoc / OpenAPI 3 uyumlu
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "Tum olay kayitlarini sunan DTO (Pageable)")
+@Schema(description = "Tum olay kayitlarini sunan DTO (Pageable)")
 public class OlayKayitResponse {
 
-    @ApiModelProperty(value = "Id")
+    @Schema(description = "Kayıt ID")
     private Long id;
 
-    @ApiModelProperty(value = "doktorun sms mesajı uzerinden islem yaptigi tarih")
-    @JsonFormat(pattern="dd.MM.yyyy HH:mm")
+    @Schema(
+            description = "Doktorun SMS mesajı üzerinden işlem yaptığı tarih",
+            example = "14.12.2025 16:30"
+    )
+    @JsonFormat(pattern = "dd.MM.yyyy HH:mm")
     private LocalDateTime doctorApproveDate;
 
-    @ApiModelProperty(value = "order tetkik, panikdeger seklinde olay tipi")
+    @Schema(description = "Order, tetkik veya panik değer şeklinde olay tipi")
     private Olaylar olay;
 
-    @ApiModelProperty(value = "order, tetkik, panikdeger numarasi")
+    @Schema(description = "Order, tetkik veya panik değer numarası", example = "20251214")
     private String numara;
 
-    @ApiModelProperty(value = "doktorun ekrandan sectigi cevap")
+    @Schema(description = "Doktorun ekrandan seçtiği onay durumu")
     private OnayDurumlari onayDurumu;
 
-    @ApiModelProperty(value = "hemsirenin ekrandan goruldu onayi verme durumu")
+    @Schema(description = "hemsirenin ekrandan goruldu onayi verme durumu")
     private Boolean gorulmeDurumu;
 
-    @ApiModelProperty(value = "hemsirenin ekranda goruldu yaptigi zamani")
+    @Schema(description = "hemsirenin ekranda goruldu yaptigi zamani")
     @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
     private LocalDateTime viewDate;
 
-    @ApiModelProperty(value = "ordera muhatap doktor adi")
+    @Schema(description = "ordera muhatap doktor adi")
     private String doctorName;
 
-    @ApiModelProperty(value = "order olusturan hemsire adi soyadi")
+    @Schema(description = "order olusturan hemsire adi soyadi")
     private String nurseName;
 
-    @ApiModelProperty(value = "hemsirenin order olusturdugu zaman")
+    @Schema(description = "hemsirenin order olusturdugu zaman")
     @JsonFormat(pattern="dd-MM-yyyy HH:mm")
     private LocalDateTime orderCreatedDate;
 
-    @ApiModelProperty(value = "hasta numarasi")
+    @Schema(description = "hasta numarasi")
     private String patientNo;
 
-    @ApiModelProperty(value = "hasta adi soyadi")
+    @Schema(description = "hasta adi soyadi")
     private String patientName;
 
-    @ApiModelProperty(value = "hasta dogum tarihi")
+    @Schema(description = "hasta dogum tarihi")
     @JsonFormat(pattern="dd.MM.yyyy")
     private LocalDate patientBirthdate;
 
-    @ApiModelProperty(value = "Hasta Katı")
+    @Schema(description = "Hasta Katı")
     private Integer yatakgrubuKodu;
 
-    @ApiModelProperty(value = "Hasta Yattığı kat ve durumu")
+    @Schema(description = "Hasta Yattığı kat ve durumu")
     private String yatakgrubuAdi;
 }

@@ -2,8 +2,7 @@ package tr.com.medlineadana.verbalorder.monadservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,34 +15,34 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(value = "Monad veri tabanlarindaki iliskili sözel order detayını döner")
+@Schema(description = "Monad veri tabanlarindaki iliskili sözel order detayını döner")
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class OlayResponse {
 
-    @ApiModelProperty(value = "Doktor adi soyadi")
+    @Schema(description = "Doktor adi soyadi")
     private String tedaviDoktoru;
 
-    @ApiModelProperty(value = "Hemsire adi soyadi")
+    @Schema(description = "Hemsire adi soyadi")
     private String kayitedenPersonel;
 
-    @ApiModelProperty(value = "Hasta adi soyadi")
+    @Schema(description = "Hasta adi soyadi")
     private String hastaadiSoyadi;
 
-    @ApiModelProperty(value = "Kayit tarihi")
+    @Schema(description = "Kayit tarihi")
     @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
     private LocalDateTime kayitTarihi;
 
-    @ApiModelProperty(value = "Hasta No")
+    @Schema(description = "Hasta No")
     private String hastaNo;
 
-    @ApiModelProperty(value = "Hasta dogum tarihi")
+    @Schema(description = "Hasta dogum tarihi")
     @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate dogumTarihi;
 
-    @ApiModelProperty(value = "Hasta Katı")
+    @Schema(description = "Hasta Katı")
     private Integer yatakgrubuKodu;
 
-    @ApiModelProperty(value = "Hasta Yattığı kat ve durumu")
+    @Schema(description = "Hasta Yattığı kat ve durumu")
     private String yatakgrubuAdi;
 
 }

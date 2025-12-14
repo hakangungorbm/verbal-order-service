@@ -1,6 +1,6 @@
 package tr.com.medlineadana.verbalorder.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Sort;
@@ -14,13 +14,14 @@ public class PageSortInfo {
 
     private static final int DEFAULT_PAGE_SIZE = 20;
 
-    @ApiModelProperty(example = "1" )
+    @Schema(description = "Sayfa numarası (0'dan başlar)", example = "0", minimum = "0")
     @Min(0)
-    private int first;
+    private int first = 0;
 
-    @ApiModelProperty(example = "20")
-    @Min(0)@Max(100)
-    private int rows;
+    @Schema(description = "Sayfa başına kayıt sayısı", example = "20", minimum = "1", maximum = "100", defaultValue = "20")
+    @Min(1)
+    @Max(100)
+    private int rows = DEFAULT_PAGE_SIZE;
 
     private Sort.Direction sortDirection = Sort.Direction.DESC;
 

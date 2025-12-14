@@ -44,7 +44,7 @@ public class OlayDetay {
     private Olaylar olay;
 
     @Column(name = "numara", nullable = false)
-    @Size(min = 6, max = 8, message = "Olay numarasi 6 ila 8 hane arasinda olmalidir!")
+    @Size(min = 6, max = 9, message = "Olay numarasi 6 ila 9 hane arasinda olmalidir!")
     private String numara;
 
     @Column(name = "created_date")

@@ -61,7 +61,7 @@ public class MedlineServiceImpl implements MedlineService {
             throw new ServiceFaultException("Bu kayıt için daha önce işlem yapılmış. Tekrar işlem yapılamaz", "400");
         }
 
-        if (!(request.getNumber().length() >= 6 && request.getNumber().length() <=8)) {
+        if (!(request.getNumber().length() >= 6 && request.getNumber().length() <=9)) {
             throw new ServiceFaultException("Geçersiz numara. Olay numarası istenilen uzunlukta degil!");
         }
 
